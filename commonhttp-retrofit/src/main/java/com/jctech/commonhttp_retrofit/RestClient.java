@@ -7,6 +7,7 @@ import com.jctech.commonhttp_retrofit.callback.IFailure;
 import com.jctech.commonhttp_retrofit.callback.IRequest;
 import com.jctech.commonhttp_retrofit.callback.ISuccess;
 import com.jctech.commonhttp_retrofit.callback.RequestCallbacks;
+import com.jctech.commonhttp_retrofit.download.DownloadHandler;
 
 import java.io.File;
 import java.util.Map;
@@ -15,12 +16,12 @@ import java.util.WeakHashMap;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 /**
  * Created by CHENQIAO on 2017/9/3.
  */
-
 public class RestClient {
 
     private final String URL;
@@ -33,7 +34,10 @@ public class RestClient {
     private final IError IERROR;
     private final RequestBody BODY;
     private final File FILE;
-    private final Context context;
+    private final String DOWNLOAD_DIR;
+    private final String NAME;
+    private final Context CONTEXT;
+    private final String EXTENSION;
 
 
     public RestClient(String mUrl,
@@ -44,7 +48,10 @@ public class RestClient {
                       IError iError,
                       RequestBody mRequestbody,
                       Context context,
-                      File file) {
+                      String downloadDir,
+                      String name,
+                      File file,
+                      String extension) {
         this.URL = mUrl;
         PARAMS.putAll(mParams);
         this.IREQUEST = iRequet;
@@ -52,8 +59,11 @@ public class RestClient {
         this.IFAILURE = iFailure;
         this.IERROR = iError;
         this.BODY = mRequestbody;
-        this.context = context;
+        this.CONTEXT = context;
+        this.DOWNLOAD_DIR = downloadDir;
+        this.NAME = name;
         this.FILE = file;
+        this.EXTENSION = extension;
     }
 
     public static RestClientBuilder builder() {
@@ -67,7 +77,6 @@ public class RestClient {
         if (IREQUEST != null) {
             IREQUEST.onRequestStart();
         }
-
         switch (http_method) {
 
             case GET:
@@ -90,9 +99,7 @@ public class RestClient {
                 break;
             case UPLOAD:
                 final RequestBody requestBody = RequestBody.create(MediaType.parse(MultipartBody.FORM.toString()), FILE);
-
                 final MultipartBody.Part body = MultipartBody.Part.createFormData("file", FILE.getName(), requestBody);
-
                 call = restService.upload(URL, body);
                 break;
             default:
@@ -142,5 +149,15 @@ public class RestClient {
         request(HTTP_METHOD.DELETE);
     }
 
+    public final void upload() {
+        request(HTTP_METHOD.UPLOAD);
+    }
+
+    public final void download() {
+        new DownloadHandler(URL, IREQUEST, DOWNLOAD_DIR, EXTENSION, NAME,
+                ISUCCESS, IFAILURE, IERROR)
+                .handleDownload();
+    }
 
 }
+
