@@ -6,6 +6,7 @@ import com.jctech.commonhttp_retrofit.callback.IError;
 import com.jctech.commonhttp_retrofit.callback.IFailure;
 import com.jctech.commonhttp_retrofit.callback.IRequest;
 import com.jctech.commonhttp_retrofit.callback.ISuccess;
+import com.jctech.commonhttp_retrofit.download.DownloadHandler;
 
 import java.io.File;
 import java.util.Map;
@@ -28,7 +29,10 @@ public class RestClientBuilder {
     private IError mError;
     private RequestBody mRequestbody;
     private Context mContext;
+    private String mDownloadDir;
     private File mFile;
+    private String mExtension;
+    private String mName;
 
     RestClientBuilder() {
     }
@@ -91,9 +95,24 @@ public class RestClientBuilder {
         return this;
     }
 
+    public final RestClientBuilder name(String name) {
+        this.mName = name;
+        return this;
+    }
+
+    public final RestClientBuilder dir(String dir) {
+        this.mDownloadDir = dir;
+        return this;
+    }
+
+    public final RestClientBuilder extension(String extension) {
+        this.mExtension = extension;
+        return this;
+    }
+
 
     public RestClient build() {
-        return new RestClient(mUrl, PARAMS, mRequet, mSuccess, mFailure, mError, mRequestbody, mContext, mFile);
+        return new RestClient(mUrl, PARAMS, mRequet, mSuccess, mFailure, mError, mRequestbody, mContext, mDownloadDir, mName, mFile, mExtension);
     }
 
 
