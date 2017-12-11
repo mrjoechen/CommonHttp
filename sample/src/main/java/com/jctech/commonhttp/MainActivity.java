@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void doRxDownload(){
         RestRxClient.builder()
-                  .url("http://lsandroid.b0.upaiyun.com/updata/9709870c092839ea5c28d989765939ac.ts")
+                  .url("http://")
                   .build()
                   .download()
                   .map(new Function<ResponseBody, File>() {
