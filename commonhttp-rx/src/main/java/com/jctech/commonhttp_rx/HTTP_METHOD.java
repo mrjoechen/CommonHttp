@@ -1,7 +1,7 @@
 package com.jctech.commonhttp_rx;
 
 /**
- * Created by CHENQIAO on 2017/9/8.
+ * Created by CHENQIAO on 2017/12/9.
  */
 
 public enum HTTP_METHOD {

@@ -21,7 +21,7 @@ import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
 /**
- * Created by CHENQIAO on 2017/9/3.
+ * Created by CHENQIAO on 2017/12/10.
  */
 
 public interface RestRxService {
